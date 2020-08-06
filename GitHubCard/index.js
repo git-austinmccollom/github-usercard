@@ -6,23 +6,27 @@ import axios from 'axios';
     https://api.github.com/users/<your name>
 */
 
+const followersArray = ['git-austinmccollom', 'tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell'];
 
-axios.get('https://api.github.com/users/git-austinmccollom')
-  // the response body is put by Axios into a 'data' property of the resolved thing
-  .then(function successHandler(response) {
-    // the data we want is available HERE, not outside of this callback
-    // DOM SURGERY THAT USES THE RESOLVED DATA NEEDS TO GO HERE
-    // console.log(response);
+followersArray.forEach( user => {
 
-    const card = cardMaker(response.data);
+  axios.get(`https://api.github.com/users/${user}`)
+    // the response body is put by Axios into a 'data' property of the resolved thing
+    .then(function successHandler(response) {
+      // the data we want is available HERE, not outside of this callback
+      // DOM SURGERY THAT USES THE RESOLVED DATA NEEDS TO GO HERE
+      // console.log(response);
 
-    const cards = document.querySelector('.cards');
-    cards.appendChild(card);
-  })
-  .catch(error => {
-    debugger
-  })
+      const card = cardMaker(response.data);
 
+      const cards = document.querySelector('.cards');
+      cards.appendChild(card);
+    })
+    .catch(error => {
+      debugger
+    })
+
+})
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -46,8 +50,6 @@ axios.get('https://api.github.com/users/git-austinmccollom')
     Using that array, iterate over it, requesting data for each user, creating a new card for each
     user, and adding that card to the DOM.
 */
-
-const followersArray = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell'];
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -91,8 +93,8 @@ function cardMaker({ avatar_url, name, login, location, html_url, followers, fol
   usernameElement.textContent = login;
   locationElement.textContent = location;
   profileLink.setAttribute('href', html_url);
-  followersElement.textContent = followers;
-  followingElement.textContent = following;
+  followersElement.textContent = `followers: ${followers}`;
+  followingElement.textContent = `following: ${following}`;
   bioElement.textContent = bio;
 
   // append and organize
